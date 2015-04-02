@@ -19,7 +19,7 @@ defmodule HexWeb.Mixfile do
   defp deps do
     [{:plug,      "~> 0.8"},
      {:cowboy,    "~> 1.0"},
-     {:ecto,      "~> 0.4.0"},
+     {:ecto,      "~> 0.5.0"},
      {:postgrex,  ">= 0.0.0"},
      {:poison,    "~> 1.2"},
      {:porcelain, "~> 2.0"},
@@ -66,11 +66,15 @@ defmodule HexWeb.Mixfile do
   end
 
   defp ecto_migrate(args) do
-    Mix.Task.run "ecto.migrate", ["--no-start" | args]
+    # Workaround for task bug
+    Mix.Task.run "app.start", ["--no-start"]
+    Mix.Task.run "ecto.migrate", args
   end
 
   defp ecto_rollback(args) do
-    Mix.Task.run "ecto.rollback", ["--no-start" | args]
+    # Workaround for task bug
+    Mix.Task.run "app.start", ["--no-start"]
+    Mix.Task.run "ecto.rollback", args
   end
 
   defp env(env, level, fun) do
